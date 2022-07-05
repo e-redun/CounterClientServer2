@@ -1,0 +1,111 @@
+﻿<UserControl x:Class="ClientWpfUI.Views.CounterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:conv="clr-namespace:ClientWpfUI.Converters"
+             mc:Ignorable="d"
+             d:DesignHeight="250" d:DesignWidth="300"
+             >
+    <UserControl.Resources>
+
+        <conv:CounterStateToRusConverter
+            x:Key="CounterStateToRusConverter"/>
+
+        <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=ClientConnected , TargetNullValue=False}"
+                             Value="False"
+                             >
+                    <Setter Property="Text" Value="Н/Д"/>
+                </DataTrigger>
+            </Style.Triggers>
+
+        </Style>
+
+        <Style x:Key="TextBlockCounterStateStyle" TargetType="TextBlock"
+               BasedOn="{StaticResource TextBlockStyle}">
+            <Setter Property="Text" Value="{Binding Path=Counter.State,
+                                            Converter={StaticResource CounterStateToRusConverter},
+                                            FallbackValue=Н/Д}"/>
+        </Style>
+
+        <Style x:Key="TextBlockCounterValueStyle" TargetType="TextBlock"
+               BasedOn="{StaticResource TextBlockStyle}">
+            <Setter Property="Text" Value="{Binding Path=Counter.Value, FallbackValue=Н/Д}"/>
+        </Style>
+
+        <Style x:Key="StopButtonStyle" TargetType="Button"
+               BasedOn="{StaticResource ButtonStyle}">
+            <Setter Property="Content" Value="Стоп"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=Counter.State}"
+                             Value="Stopped">
+                    <Setter Property="Content" Value="Продолжить"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+
+        <!--Ряд 1-->
+        <TextBlock Grid.Row="1" Grid.Column="1"
+                   Text="Состояние счетчика: "
+                   />
+
+        <TextBlock Grid.Row="1" Grid.Column="2"
+                   Style="{StaticResource TextBlockCounterStateStyle}"
+                   />
+
+        <!--Ряд 3-->
+        <TextBlock Grid.Row="3" Grid.Column="1"
+                   Text="Значение счетчика: "
+                   />
+
+        <TextBlock Grid.Row="3" Grid.Column="2"
+                   Style="{StaticResource TextBlockCounterValueStyle}"
+                   />
+
+        <!--Ряд 5-->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                    Grid.Row="5" Grid.Column="1"
+                    Grid.ColumnSpan="2"
+                    >
+            <CheckBox x:Name="testCheckBox"
+                      IsChecked="False" Height="28" VerticalAlignment="Bottom"
+                      Visibility="Collapsed"
+                      />
+            
+            <Button Content="Старт"
+                    Command="{Binding StartCounterCommand}"
+                    Style="{StaticResource ButtonStyle}"
+                    />
+
+            <Button Command="{Binding StopCounterCommand}"
+                    Style="{StaticResource StopButtonStyle}"
+                    >
+            </Button>
+            
+            <Button Content="Сброс"
+                    Command="{Binding ResetCounterCommand}"
+                    Style="{StaticResource ButtonStyle}"
+                    />
+        </StackPanel>
+    </Grid>
+</UserControl>
