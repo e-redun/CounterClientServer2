@@ -1,0 +1,14 @@
+[
+  {
+    "ConProtocol": "Socket",
+    "ServerIpAddress": "127.0.0.1",
+    "ServerPort": "8003",
+    "Error": ""
+  },
+  {
+    "ConProtocol": "Tcp",
+    "ServerIpAddress": "127.0.0.1",
+    "ServerPort": "8004",
+    "Error": ""
+  }
+]
